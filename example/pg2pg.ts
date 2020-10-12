@@ -1,9 +1,9 @@
-import etl from '../src'
+import { datax } from '../src'
 (async function (): Promise<void> {
-  const srcConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'cth' }
-  const destConnect = { host: '172.16.100.242', username: 'postgres', password: 'geoc_sport', database: 'data_test' }
+  const srcConnect = { host: '', username: 'postgres', password: '', database: '' }
+  const destConnect = { host: '', username: 'postgres', password: '', database: '' }
   try {
-    const etljcbcd = await etl(srcConnect, destConnect, { srcName: 'jcb_cd_test', destName: 'jcb_cd', column: ['*'] })
+    const etljcbcd = await datax(srcConnect, destConnect, { srcName: 'jcb_cd_test', destName: 'jcb_cd', column: ['*'] })
     etljcbcd.on('finish', (res) => {
       console.log('finish')
     })

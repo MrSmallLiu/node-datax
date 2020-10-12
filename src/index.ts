@@ -24,7 +24,7 @@ interface DbConnectConfig{
   port?: number;
 }
 
-export default async function datax (srcConnectConfig: DbConnectConfig, destConnectConfig: DbConnectConfig, tableCfg: Config): Promise<Datax> {
+export async function datax (srcConnectConfig: DbConnectConfig, destConnectConfig: DbConnectConfig, tableCfg: Config): Promise<Datax> {
   // console.log(tables);
   // 连接数据库
   const srcConnectDB = new Database(srcConnectConfig)

@@ -1,4 +1,4 @@
-import EtlPg from './lib/etl-pg';
+import Datax from './lib/datax';
 /**
  * 同步的表配置
  */
@@ -17,5 +17,5 @@ interface DbConnectConfig {
     database: string;
     port?: number;
 }
-export default function etl(srcConnectConfig: DbConnectConfig, destConnectConfig: DbConnectConfig, tableCfg: Config): Promise<EtlPg>;
+export declare function datax(srcConnectConfig: DbConnectConfig, destConnectConfig: DbConnectConfig, tableCfg: Config): Promise<Datax>;
 export {};

@@ -1,4 +1,4 @@
-import { SyncState } from './etl-pg';
+import { SyncState } from './datax';
 export interface ReaderData {
     data: any[];
     state: SyncState;
