@@ -1,7 +1,7 @@
 // import { Sequelize } from 'sequelize/types'
 import { Reader, ReaderData, ReaderCfg } from '../lib/reader'
 import { SyncState } from '../lib/datax'
-import * as Cursor from 'pg-cursor'
+// import * as Cursor from 'pg-cursor'
 
 // import 'Event' from ''
 
@@ -12,17 +12,32 @@ export default class PostgresReader implements Reader {
   public column: string[]
   private readState: SyncState
   private cursor: any
+  private cursorName: string
   public batchSize: number // 批量读取与写入的条数
   constructor (props: ReaderCfg) {
     this.db = props.db
     this.tableName = props.tableName
+    this.cursorName = `${props.tableName}_cursor`
     this.column = props.column
-    this.batchSize = props.batchSize || 19
+    this.batchSize = props.batchSize || 20
     this.readState = SyncState.reading
   }
 
-  async init (): Promise<void> {
-    this.cursor = this.db.query(new Cursor(`select ${this.column.join(',')} from "${this.tableName}"`))
+  async init (): Promise<boolean> {
+    // await this.db.query('begin')
+    await this.db.query('begin')
+    this.cursorName = `${this.tableName}_cursor`
+    const cursorSql = `declare "${this.cursorName}" cursor for select ${this.column.join(',')} from "${this.tableName}"`
+    const cursorRes = await this.db.query(cursorSql).catch(err => {
+      console.error(new Error(err))
+    })
+    if (cursorRes === undefined) {
+      this.db.query('rollback')
+      this.readState = SyncState.error
+      return false
+    }
+    return true
+    // this.cursor = this.db.query(new Cursor(`select ${this.column.join(',')} from "${this.tableName}"`))
   }
 
   async read (): Promise<ReaderData> {
@@ -30,27 +45,19 @@ export default class PostgresReader implements Reader {
     if (this.readState === SyncState.finish) {
       return result
     }
-    const dataRes: any = await new Promise((resolve, reject) => {
-      this.cursor.read(this.batchSize, (err, rows) => {
-        if (err) {
-          reject(err)
-          return
-        }
-        resolve(rows)
-      })
-    }).catch(err => {
+    const dataSql = `fetch ${this.batchSize} from "${this.cursorName}"`
+    const dataRes = await this.db.query(dataSql).catch(err => {
       this.readState = SyncState.error
       result.msg = '读取失败'
       result.err = err
+      this.db.query('rollback')
     })
-
-    if (dataRes !== undefined) {
-      if (dataRes.length === 0) {
-        this.readState = SyncState.finish
-      }
+    if (dataRes === undefined) { return result }
+    if (dataRes.rows.length === 0) {
+      this.readState = SyncState.finish
     }
     result.state = this.readState
-    result.data = dataRes
+    result.data = dataRes.rows
     return result
   }
 }

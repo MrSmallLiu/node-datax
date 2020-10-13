@@ -12,7 +12,7 @@ export default class Database {
       password: dbInfo.password,
       max: 3,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000
+      connectionTimeoutMillis: 100000
     })
   }
 

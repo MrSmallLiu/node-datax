@@ -20,7 +20,11 @@ export default class Datax extends EE {
   }
 
   async start (reader: Reader, writer: Writer): Promise<void> {
-    await reader.init()
+    if (!await reader.init()) {
+      const result: DataxResult = { count: this.syncDataCount, msg: '初始化失败' }
+      this.emit('error', result)
+      return
+    }
     let state: SyncState = SyncState.reading
     do {
       const readerData = await reader.read()

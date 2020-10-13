@@ -6,8 +6,9 @@ export default class PostgresReader implements Reader {
     column: string[];
     private readState;
     private cursor;
+    private cursorName;
     batchSize: number;
     constructor(props: ReaderCfg);
-    init(): Promise<void>;
+    init(): Promise<boolean>;
     read(): Promise<ReaderData>;
 }

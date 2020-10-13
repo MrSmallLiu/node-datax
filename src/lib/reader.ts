@@ -6,7 +6,7 @@ export interface ReaderData {
   err?: any;
 }
 export interface Reader{
-  init(): Promise<void>;
+  init(): Promise<boolean>;
   read(): Promise<ReaderData>;
 }
 export interface ReaderCfg {

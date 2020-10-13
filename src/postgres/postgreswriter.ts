@@ -24,7 +24,7 @@ export default class PostgresWriter implements Writer {
         } else if (typeof tempData[field] === 'number') {
           values.push(tempData[field])
         } else if (typeof tempData[field] === 'string') {
-          values.push(`'${tempData[field]}'`)
+          values.push(`'${tempData[field].replace(/'/g, '\'\'')}'`)
         }
       }
       sqlValues.push(`( ${values.join(',')} )`)
