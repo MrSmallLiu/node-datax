@@ -9,6 +9,7 @@ class PostgresReader {
         this.tableName = props.tableName;
         this.cursorName = `${props.tableName}_cursor`;
         this.column = props.column;
+        this.where = props.where || '1=1';
         this.batchSize = props.batchSize || 20;
         this.readState = datax_1.SyncState.reading;
     }
@@ -16,7 +17,7 @@ class PostgresReader {
         // await this.db.query('begin')
         await this.db.query('begin');
         this.cursorName = `${this.tableName}_cursor`;
-        const cursorSql = `declare "${this.cursorName}" cursor for select ${this.column.join(',')} from "${this.tableName}"`;
+        const cursorSql = `declare "${this.cursorName}" cursor for select ${this.column.join(',')} from "${this.tableName}" where ${this.where}`;
         const cursorRes = await this.db.query(cursorSql).catch(err => {
             console.error(new Error(err));
         });

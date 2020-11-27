@@ -11,7 +11,8 @@ export default class PostgresReader implements Reader {
   public tableName: string
   public column: string[]
   private readState: SyncState
-  private cursor: any
+  // private cursor: any
+  public where: string
   private cursorName: string
   public batchSize: number // 批量读取与写入的条数
   constructor (props: ReaderCfg) {
@@ -19,6 +20,7 @@ export default class PostgresReader implements Reader {
     this.tableName = props.tableName
     this.cursorName = `${props.tableName}_cursor`
     this.column = props.column
+    this.where = props.where || '1=1'
     this.batchSize = props.batchSize || 20
     this.readState = SyncState.reading
   }
@@ -27,7 +29,7 @@ export default class PostgresReader implements Reader {
     // await this.db.query('begin')
     await this.db.query('begin')
     this.cursorName = `${this.tableName}_cursor`
-    const cursorSql = `declare "${this.cursorName}" cursor for select ${this.column.join(',')} from "${this.tableName}"`
+    const cursorSql = `declare "${this.cursorName}" cursor for select ${this.column.join(',')} from "${this.tableName}" where ${this.where}`
     const cursorRes = await this.db.query(cursorSql).catch(err => {
       console.error(new Error(err))
     })
@@ -55,6 +57,7 @@ export default class PostgresReader implements Reader {
     if (dataRes === undefined) { return result }
     if (dataRes.rows.length === 0) {
       this.readState = SyncState.finish
+      this.db.query('commit')
     }
     result.state = this.readState
     result.data = dataRes.rows

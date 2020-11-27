@@ -14,4 +14,5 @@ export interface ReaderCfg {
     tableName: string;
     column: string[];
     batchSize?: number;
+    where?: string;
 }

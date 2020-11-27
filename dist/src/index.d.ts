@@ -6,6 +6,8 @@ interface Config {
     srcName: string;
     destName?: string;
     column: string[];
+    staticColumn?: object;
+    where?: string;
     batchSize?: number;
     create?: boolean;
     clean?: boolean;

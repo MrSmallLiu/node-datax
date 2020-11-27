@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const src_1 = require("../src");
 (async function () {
-    const srcConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'cth' };
-    const destConnect = { host: '172.16.100.242', username: 'postgres', password: 'geoc_sport', database: 'data_test' };
+    const srcConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'test' };
+    const destConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'test' };
     try {
-        const etljcbcd = await src_1.datax(srcConnect, destConnect, { srcName: 'jcb_cd', destName: 'jcb_cd', column: ['*'] });
+        const etljcbcd = await src_1.datax(srcConnect, destConnect, { srcName: 'test', destName: 'test1', where: 'data_id = 1', column: ['data_id', 'name'], staticColumn: { user_id: '111', updated_at: 'now()' } });
         etljcbcd.on('finish', (res) => {
             console.log('finish');
         });
@@ -13,9 +13,7 @@ const src_1 = require("../src");
             console.log('error');
         });
         etljcbcd.on('data', (res) => {
-            if (res.count % 10000 === 0) {
-                console.log('完成条数：', res.count);
-            }
+            console.log('完成条数：', res.count);
         });
     }
     catch (error) {

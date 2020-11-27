@@ -5,4 +5,5 @@ export interface WriterCfg {
     db: any;
     tableName: string;
     column: string[];
+    staticColumn: object;
 }

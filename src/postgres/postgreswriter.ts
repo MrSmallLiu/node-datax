@@ -4,10 +4,16 @@ export default class PostgresWriter implements Writer {
   /** 是否开始读取 */
   public tableName: string
   public column: string[]
+  public staticColumn: object
   constructor (props: WriterCfg) {
     this.db = props.db
     this.tableName = props.tableName
-    this.column = props.column
+    this.column = [...props.column]
+    this.staticColumn = props.staticColumn || {}
+    // 将静态字段添加到column中
+    for (const columnKey in this.staticColumn) {
+      this.column.push(columnKey)
+    }
   }
 
   async write (data: any[]): Promise<boolean> {
@@ -16,6 +22,10 @@ export default class PostgresWriter implements Writer {
     const sqlValues = []
     for (const tempData of data) {
       const values = []
+      // 临时数据中插入静态字段数据
+      for (const key in this.staticColumn) {
+        tempData[key] = this.staticColumn[key]
+      }
       for (const field in tempData) {
         if (tempData[field] === null) {
           values.push('NULl')

@@ -1,9 +1,9 @@
 import { datax } from '../src'
 (async function (): Promise<void> {
-  const srcConnect = { host: '', username: 'postgres', password: '', database: '' }
-  const destConnect = { host: '', username: 'postgres', password: '', database: '' }
+  const srcConnect = { host: '', username: 'postgres', password: '', database: 'test' }
+  const destConnect = { host: '', username: 'postgres', password: '', database: 'test' }
   try {
-    const etljcbcd = await datax(srcConnect, destConnect, { srcName: 'jcb_cd_test', destName: 'jcb_cd', column: ['*'] })
+    const etljcbcd = await datax(srcConnect, destConnect, { srcName: 'test', destName: 'test1', where: 'data_id = 1', column: ['data_id', 'name'], staticColumn: { user_id: '111', updated_at: 'now()' } })
     etljcbcd.on('finish', (res) => {
       console.log('finish')
     })
