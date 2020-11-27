@@ -11,4 +11,5 @@ export default class PostgresReader implements Reader {
     constructor(props: ReaderCfg);
     init(): Promise<boolean>;
     read(): Promise<ReaderData>;
+    close(): Promise<void>;
 }

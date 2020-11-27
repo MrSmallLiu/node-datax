@@ -44,6 +44,8 @@ class PostgresWriter {
         });
         return true;
     }
+    async close() {
+        await this.db.end();
+    }
 }
 exports.default = PostgresWriter;
-//# sourceMappingURL=postgreswriter.js.map

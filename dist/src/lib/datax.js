@@ -45,7 +45,8 @@ class Datax extends event_emitter_1.default {
                 }
             }
         } while (state === SyncState.reading);
+        reader.close();
+        writer.close();
     }
 }
 exports.default = Datax;
-//# sourceMappingURL=datax.js.map

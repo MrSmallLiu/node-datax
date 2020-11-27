@@ -8,6 +8,7 @@ export interface ReaderData {
 export interface Reader{
   init(): Promise<boolean>;
   read(): Promise<ReaderData>;
+  close(): Promise<void>;
 }
 export interface ReaderCfg {
   db: any;

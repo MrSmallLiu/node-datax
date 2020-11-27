@@ -48,5 +48,7 @@ export default class Datax extends EE {
         }
       }
     } while (state === SyncState.reading)
+    reader.close()
+    writer.close()
   }
 }

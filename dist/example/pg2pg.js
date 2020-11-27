@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const src_1 = require("../src");
 (async function () {
-    const srcConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'test' };
-    const destConnect = { host: '172.16.111.3', username: 'postgres', password: 'geoc_sport', database: 'test' };
+    const srcConnect = { host: '', username: 'postgres', password: '', database: '' };
+    const destConnect = { host: '', username: 'postgres', password: '', database: '' };
     try {
-        const etljcbcd = await src_1.datax(srcConnect, destConnect, { srcName: 'test', destName: 'test1', where: 'data_id = 1', column: ['data_id', 'name'], staticColumn: { user_id: '111', updated_at: 'now()' } });
+        const etljcbcd = await src_1.datax(srcConnect, destConnect, { srcName: '', destName: '_copy1', column: ['*'] });
         etljcbcd.on('finish', (res) => {
             console.log('finish');
         });
@@ -20,4 +20,3 @@ const src_1 = require("../src");
         console.log('初始化失败');
     }
 })();
-//# sourceMappingURL=pg2pg.js.map

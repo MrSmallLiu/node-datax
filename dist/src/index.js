@@ -23,4 +23,3 @@ async function datax(srcConnectConfig, destConnectConfig, tableCfg) {
     return new datax_1.default(reader, writer);
 }
 exports.datax = datax;
-//# sourceMappingURL=index.js.map

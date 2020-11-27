@@ -46,4 +46,8 @@ export default class PostgresWriter implements Writer {
     })
     return true
   }
+
+  async close (): Promise<void> {
+    await this.db.end()
+  }
 }

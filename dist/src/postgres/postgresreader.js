@@ -39,18 +39,21 @@ class PostgresReader {
             this.readState = datax_1.SyncState.error;
             result.msg = '读取失败';
             result.err = err;
-            this.db.query('rollback');
         });
         if (dataRes === undefined) {
+            await this.db.query('rollback');
             return result;
         }
         if (dataRes.rows.length === 0) {
             this.readState = datax_1.SyncState.finish;
+            await this.db.query('commit');
         }
         result.state = this.readState;
         result.data = dataRes.rows;
         return result;
     }
+    async close() {
+        await this.db.end();
+    }
 }
 exports.default = PostgresReader;
-//# sourceMappingURL=postgresreader.js.map

@@ -7,4 +7,5 @@ export default class PostgresWriter implements Writer {
     staticColumn: object;
     constructor(props: WriterCfg);
     write(data: any[]): Promise<boolean>;
+    close(): Promise<void>;
 }

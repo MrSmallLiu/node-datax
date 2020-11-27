@@ -52,15 +52,21 @@ export default class PostgresReader implements Reader {
       this.readState = SyncState.error
       result.msg = '读取失败'
       result.err = err
-      this.db.query('rollback')
     })
-    if (dataRes === undefined) { return result }
+    if (dataRes === undefined) {
+      await this.db.query('rollback')
+      return result
+    }
     if (dataRes.rows.length === 0) {
       this.readState = SyncState.finish
-      this.db.query('commit')
+      await this.db.query('commit')
     }
     result.state = this.readState
     result.data = dataRes.rows
     return result
+  }
+
+  async close (): Promise<void> {
+    await this.db.end()
   }
 }
