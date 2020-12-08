@@ -1,6 +1,6 @@
 {
   "name": "node-datax",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Data ETL of TS/JS",
   "keywords": [
     "ETL",
