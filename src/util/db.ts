@@ -10,6 +10,7 @@ export default class Database {
       user: dbInfo.username,
       database: dbInfo.database,
       password: dbInfo.password,
+      port: dbInfo.port,
       max: 3,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 100000
