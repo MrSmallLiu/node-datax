@@ -12,6 +12,8 @@ class PostgresWriter {
         }
     }
     async write(data) {
+              // 遍历拿到字段名，解决字段顺序不对的bug
+              const fields=`("${Object.keys(data[0]).join('","')}")`;
         // console.log('写入')
         // const result = true
         const sqlValues = [];
@@ -37,7 +39,7 @@ class PostgresWriter {
             }
             sqlValues.push(`( ${values.join(',')} )`);
         }
-        const fields = this.column.join(',') === '*' ? '' : `(${this.column.join(',')})`;
+        // const fields = this.column.join(',') === '*' ? '' : `(${this.column.join(',')})`;
         const insertSql = `insert into "${this.tableName}" ${fields} values ${sqlValues.join(',')}`;
         await this.db.query(insertSql).catch(err => {
             throw err;
